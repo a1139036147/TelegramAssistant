@@ -1,4 +1,5 @@
-FROM python:3.12-slim
+FROM arros/telegram_assistant_env:v1.0.1
+
 
 # 设置工作目录
 WORKDIR /app
@@ -34,5 +35,6 @@ RUN chmod +x entrypoint.sh
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1
 
-# 使用启动脚本
+
 ENTRYPOINT ["./entrypoint.sh"]
+
