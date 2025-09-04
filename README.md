@@ -52,7 +52,8 @@ pip install -r requirements.txt
 version: '3'
 services:
   telegram_assistant:
-    image: shenxianmq/telegram_assistant:latest
+    build: .
+    image: telegram_assistant:latest
     volumes:
       - ./config:/app/config
       - ./downloads/telegram:/app/downloads/telegram
@@ -68,9 +69,9 @@ services:
 ```
 
 ```bash
-# 拉取并启动容器
+# 构建并启动容器
 
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 ```bash
@@ -88,11 +89,11 @@ docker restart telegram_assistant
 或者使用 docker run：
 
 ```bash
-# 拉取镜像
-docker pull shenxianmq/telegram_assistant:latest
+# 构建镜像
+docker build -t telegram_assistant .
 
 # 创建必要的目录
-mkdir -p config downloads/telegram downloads/youtube
+mkdir -p config downloads/telegram downloads/youtube downloads/douyin downloads/bilibili downloads/temp
 
 # 运行容器
 docker run -d \
@@ -100,10 +101,11 @@ docker run -d \
   -v $(pwd)/config:/app/config \
   -v $(pwd)/downloads/telegram:/app/downloads/telegram \
   -v $(pwd)/downloads/youtube:/app/downloads/youtube \
-  -v $(pwd)/downloads/bilibili:/app/downloads/bilibili \
   -v $(pwd)/downloads/douyin:/app/downloads/douyin \
+  -v $(pwd)/downloads/bilibili:/app/downloads/bilibili \
+  -v $(pwd)/downloads/temp:/app/temp \
   --restart unless-stopped \
-  shenxianmq/telegram_assistant:latest
+  telegram_assistant:latest
 
 # 进入容器进行初始化配置
 docker exec -it telegram_assistant python /app/init.py

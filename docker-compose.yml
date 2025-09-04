@@ -1,7 +1,8 @@
 version: '3'
 services:
   telegram_assistant:
-    image: shenxianmq/telegram_assistant:latest
+    build: .
+    image: telegram_assistant:latest
     volumes:
       - ./config:/app/config
       - ./downloads/telegram:/app/downloads/telegram
