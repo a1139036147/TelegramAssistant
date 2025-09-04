@@ -1,4 +1,4 @@
-FROM shenxianmq/telegram_assistant_env:v1.0.1
+FROM arros/telegram_assistant_env:v1.0.1
 
 # 设置工作目录
 WORKDIR /app
