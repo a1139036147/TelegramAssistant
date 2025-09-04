@@ -2,6 +2,7 @@ import os
 import re
 import logging
 from datetime import datetime
+from pathlib import Path
 from ..utils.file_utils import move_file
 from ..constants import (
     TELEGRAM_TEMP_DIR,
@@ -95,14 +96,16 @@ class TelegramHandler:
             if not filename.lower().endswith(ext.lower()):
                 filename = f"{filename}{ext}"
             filename = filename.replace(".x-flac", "").replace(".mp4.m4a", ".m4a")
-            target_path = os.path.join(target_dir, filename)
-
-            while os.path.exists(target_path):
-                base_name, _ = os.path.splitext(filename)
-                filename = f"{base_name}_{datetime.now().strftime('%Y%m%d_%H%M%S%f')}{ext}"
-                target_path = os.path.join(target_dir, filename)
-
-            success, result = move_file(downloaded_file, target_path)
+            target_path = Path(target_dir) / filename
+            if target_path.exists():
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S%f")
+                target_path = Path(target_dir) / f"{timestamp}{ext}"
+                n = 1
+                while target_path.exists():
+                    target_path = target_path.with_stem(f"{timestamp}_{n}")
+                    n += 1
+            filename = target_path.name
+            success, result = move_file(downloaded_file, str(target_path))
 
             if success:
                 return True, {
